@@ -86,16 +86,20 @@ async def cmd_diff(ui: xli.UI, args: str) -> None:
 
 @ui.command("plan", description="a checklist plan")
 async def cmd_plan(ui: xli.UI, args: str) -> None:
-    ui.plan([
-        ("explore the codebase", "completed"),
-        ("build the engine", "in_progress"),
-        ("ship v2", "pending"),
-    ])
+    ui.plan(
+        [
+            ("explore the codebase", "completed"),
+            ("build the engine", "in_progress"),
+            ("ship v2", "pending"),
+        ]
+    )
 
 
 @ui.command("reason", description="a reasoning rail")
 async def cmd_reason(ui: xli.UI, args: str) -> None:
-    ui.reasoning("First I'd check the inputs,\nthen weigh two approaches,\nthen commit to one.")
+    ui.reasoning(
+        "First I'd check the inputs,\nthen weigh two approaches,\nthen commit to one."
+    )
 
 
 @ui.command("image", description="an inline image")
@@ -139,12 +143,14 @@ async def cmd_ask(ui: xli.UI, args: str) -> None:
 
 @ui.command("wizard", description="multi-step setup wizard")
 async def cmd_wizard(ui: xli.UI, args: str) -> None:
-    answers = await ui.wizard([
-        ui.step.pick("Model", ["opus", "sonnet", "haiku"]),
-        ui.step.pick("Reasoning", ["off", "low", "high"]),
-        ui.step.confirm("Stream responses?"),
-        ui.step.text("Project name", default="my-app"),
-    ])
+    answers = await ui.wizard(
+        [
+            ui.step.pick("Model", ["opus", "sonnet", "haiku"]),
+            ui.step.pick("Reasoning", ["off", "low", "high"]),
+            ui.step.confirm("Stream responses?"),
+            ui.step.text("Project name", default="my-app"),
+        ]
+    )
     if answers is None:
         ui.note("wizard cancelled")
         return

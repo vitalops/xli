@@ -59,15 +59,19 @@ def iterm_escape(img, cols: int, rows: int) -> str:
     """iTerm2 inline image (OSC 1337). The image occupies the given cell box and the
     terminal advances the cursor past it."""
     data = _png_b64(img)
-    return (f"\033]1337;File=inline=1;width={cols};height={rows};"
-            f"preserveAspectRatio=1:{data}\a")
+    return (
+        f"\033]1337;File=inline=1;width={cols};height={rows};"
+        f"preserveAspectRatio=1:{data}\a"
+    )
 
 
 def kitty_escape(img, cols: int, rows: int) -> str:
     """kitty graphics protocol: transmit-and-display a PNG (f=100), scaled into a
     ``cols``×``rows`` cell area, chunked at 4096 bytes per the spec."""
     data = _png_b64(img)
-    chunks = [data[i:i + _KITTY_CHUNK] for i in range(0, len(data), _KITTY_CHUNK)] or [""]
+    chunks = [
+        data[i : i + _KITTY_CHUNK] for i in range(0, len(data), _KITTY_CHUNK)
+    ] or [""]
     out = []
     for i, chunk in enumerate(chunks):
         more = 1 if i < len(chunks) - 1 else 0

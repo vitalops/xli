@@ -107,13 +107,19 @@ class Cell:
 
 
 class MessageCell(Cell):
-    def __init__(self, role: str, text: str, *, markdown: bool | None = None, label: bool = True) -> None:
+    def __init__(
+        self, role: str, text: str, *, markdown: bool | None = None, label: bool = True
+    ) -> None:
         super().__init__()
         self.role, self.text, self.markdown, self.label = role, text, markdown, label
 
     def renderable(self, theme: Theme) -> RenderableType:
         return render_message(
-            self.text, role=self.role, theme=theme, markdown=self.markdown, label=self.label,  # type: ignore[arg-type]
+            self.text,
+            role=self.role,
+            theme=theme,
+            markdown=self.markdown,
+            label=self.label,  # type: ignore[arg-type]
         )
 
 
@@ -142,7 +148,11 @@ class ToolCell(Cell):
     ) -> None:
         super().__init__()
         self.name, self.args, self.output, self.error, self.status = (
-            name, args, output, error, status,
+            name,
+            args,
+            output,
+            error,
+            status,
         )
 
     @property
@@ -153,8 +163,12 @@ class ToolCell(Cell):
 
     def renderable(self, theme: Theme) -> RenderableType:
         return render_tool(
-            self.name, args=self.args, output=self.output,
-            error=self.error, status=self.status, theme=theme,
+            self.name,
+            args=self.args,
+            output=self.output,
+            error=self.error,
+            status=self.status,
+            theme=theme,
         )
 
 
@@ -201,7 +215,9 @@ class ApprovalCell(Cell):
     and the terminal auto-scrolls to it. The interactive choices + the outcome are
     separate (a live prompt while deciding, then a committed result line)."""
 
-    def __init__(self, title: str, body: str = "", reason: str = "", choices: str = "") -> None:
+    def __init__(
+        self, title: str, body: str = "", reason: str = "", choices: str = ""
+    ) -> None:
         super().__init__()
         self.title, self.body, self.reason, self.choices = title, body, reason, choices
 
@@ -286,7 +302,7 @@ class StreamingCell(Cell):
         """Pop the next finalized chunk (up to the last safe boundary), advancing the
         committed offset. When closed, the entire remainder is committable. None if there
         is nothing safe to commit yet."""
-        region = self.text[self._committed_len:]
+        region = self.text[self._committed_len :]
         if self._closed:
             if not region:
                 return None
@@ -299,9 +315,12 @@ class StreamingCell(Cell):
         return region[:boundary]
 
     def renderable(self, theme: Theme) -> RenderableType:
-        tail = self.text[self._committed_len:] or " "
+        tail = self.text[self._committed_len :] or " "
         return render_message(
-            tail, role=self.role, theme=theme, markdown=self.markdown,  # type: ignore[arg-type]
+            tail,
+            role=self.role,
+            theme=theme,
+            markdown=self.markdown,  # type: ignore[arg-type]
             label=not self._label_committed,
         )
 
@@ -346,13 +365,14 @@ class ImageCell(Cell):
         except ImportError:
             return None
         src = self.source
-        if hasattr(src, "convert"):       # already a PIL image
+        if hasattr(src, "convert"):  # already a PIL image
             img = src
         elif isinstance(src, (bytes, bytearray)):
             import io as _io
+
             img = Image.open(_io.BytesIO(src))
         else:
-            img = Image.open(src)         # path-like
+            img = Image.open(src)  # path-like
         return img.convert("RGB")
 
     def raw_emit(self, term_cols: int) -> str | None:
@@ -367,9 +387,11 @@ class ImageCell(Cell):
 
     def renderable(self, theme: Theme) -> RenderableType:
         img = self._load()
-        if img is None:                   # Pillow not installed
-            return Text("⚠ image — install Pillow:  pip install 'xli[images]'",
-                        style=theme.warning_color)
+        if img is None:  # Pillow not installed
+            return Text(
+                "⚠ image — install Pillow:  pip install 'xli[images]'",
+                style=theme.warning_color,
+            )
         cols = self.width_cols
         w, h = img.size
         rows_px = max(2, round(h * cols / w))
@@ -383,7 +405,12 @@ class ImageCell(Cell):
             for x in range(cols):
                 r1, g1, b1 = px[x, y]
                 r2, g2, b2 = px[x, y + 1]
-                t.append("▀", style=Style(color=f"#{r1:02x}{g1:02x}{b1:02x}",
-                                                bgcolor=f"#{r2:02x}{g2:02x}{b2:02x}"))
+                t.append(
+                    "▀",
+                    style=Style(
+                        color=f"#{r1:02x}{g1:02x}{b1:02x}",
+                        bgcolor=f"#{r2:02x}{g2:02x}{b2:02x}",
+                    ),
+                )
             lines.append(t)
         return Group(*lines)

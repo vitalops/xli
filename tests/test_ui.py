@@ -116,18 +116,20 @@ def test_ui_streaming_context_manager_commits_on_exit() -> None:
         # while open, the stream is live (mutable), not yet committed
         assert ui._engine.live and ui._engine.live[-1] not in ui._engine.committed
     # on exit it graduates to scrollback
-    assert any("hello world" in "\n".join(c.lines(80, ui.theme)) for c in ui._engine.committed)
+    assert any(
+        "hello world" in "\n".join(c.lines(80, ui.theme)) for c in ui._engine.committed
+    )
 
 
 def test_ui_tool_handle_updates_in_place() -> None:
     ui = xli.UI()
     card = ui.tool("shell", status="running", args={"command": ["ls"]})
-    assert card in ui._engine.live            # running -> live + mutable
+    assert card in ui._engine.live  # running -> live + mutable
     card.update(status="done", output="ok")
-    assert card in ui._engine.committed        # terminal status -> commits
+    assert card in ui._engine.committed  # terminal status -> commits
     rendered = "\n".join(card.lines(80, ui.theme))
     assert ui.theme.tool_done_glyph in rendered  # ✓ glyph marks done
-    assert "ok" in rendered                       # updated output present
+    assert "ok" in rendered  # updated output present
 
 
 def test_submit_turn_tracks_pending_for_type_ahead() -> None:
@@ -140,9 +142,9 @@ def test_submit_turn_tracks_pending_for_type_ahead() -> None:
 
 def test_finalize_orphans_cancels_leftover_running_card() -> None:
     ui = xli.UI()
-    card = ui.tool("build", status="running")     # live + mutable
+    card = ui.tool("build", status="running")  # live + mutable
     assert card in ui._engine.live
-    ui._engine._finalize_orphans(cancelled=True)   # e.g. interrupted turn
+    ui._engine._finalize_orphans(cancelled=True)  # e.g. interrupted turn
     assert card.status == "cancelled"
     assert card in ui._engine.committed
     assert ui._engine.live == []
@@ -173,7 +175,7 @@ async def test_pick_returns_selected_key() -> None:
     task = asyncio.create_task(ui.pick("Model", [("o", "Opus"), ("s", "Sonnet")]))
     await asyncio.sleep(0.01)
     assert ui._engine._picker is not None
-    ui._engine._picker.move(1)                 # highlight "Sonnet"
+    ui._engine._picker.move(1)  # highlight "Sonnet"
     ui._engine._picker.resolve(ui._engine._picker.options[ui._engine._picker.index][0])
     assert await task == "s"
 
@@ -181,7 +183,7 @@ async def test_pick_returns_selected_key() -> None:
 async def test_pick_with_no_items_returns_none() -> None:
     ui = xli.UI()
     ui._engine._print_committed = lambda c: None
-    assert await ui.pick("Nothing", []) is None        # no dead picker / no crash
+    assert await ui.pick("Nothing", []) is None  # no dead picker / no crash
 
 
 async def test_pick_escape_returns_none() -> None:
@@ -191,7 +193,7 @@ async def test_pick_escape_returns_none() -> None:
     ui._engine._print_committed = lambda c: None
     task = asyncio.create_task(ui.pick("X", ["a", "b"]))
     await asyncio.sleep(0.01)
-    ui._engine._picker.resolve(None)           # esc
+    ui._engine._picker.resolve(None)  # esc
     assert await task is None
 
 
@@ -200,14 +202,18 @@ async def test_wizard_collects_answers() -> None:
 
     ui = xli.UI()
     ui._engine._print_committed = lambda c: None
-    task = asyncio.create_task(ui.wizard([
-        ui.step.pick("Model", ["opus", "sonnet"]),
-        ui.step.confirm("Enable telemetry?"),
-    ]))
+    task = asyncio.create_task(
+        ui.wizard(
+            [
+                ui.step.pick("Model", ["opus", "sonnet"]),
+                ui.step.confirm("Enable telemetry?"),
+            ]
+        )
+    )
     await asyncio.sleep(0.01)
-    ui._engine._picker.resolve("opus")          # step 1
+    ui._engine._picker.resolve("opus")  # step 1
     await asyncio.sleep(0.01)
-    ui._engine._picker.resolve("yes")           # step 2 (confirm -> True)
+    ui._engine._picker.resolve("yes")  # step 2 (confirm -> True)
     assert await task == {"Model": "opus", "Enable telemetry?": True}
 
 
@@ -223,6 +229,7 @@ def test_at_mention_offers_files_and_inserts_path(tmp_path, monkeypatch) -> None
         def __init__(self):
             self.text = ""
             self.cursor_position = 0
+
     eng._buffer = _Buf()
 
     eng._buffer.text = "explain @alph"
@@ -233,7 +240,7 @@ def test_at_mention_offers_files_and_inserts_path(tmp_path, monkeypatch) -> None
 
     eng._sugg_index = 0
     eng._accept_suggestion(submit=False)
-    assert eng._buffer.text == "explain @alpha.py "   # @token replaced, rest kept
+    assert eng._buffer.text == "explain @alpha.py "  # @token replaced, rest kept
 
 
 def test_slash_completion_hidden_on_exact_match() -> None:
@@ -247,6 +254,7 @@ def test_slash_completion_hidden_on_exact_match() -> None:
         def __init__(self):
             self.text = ""
             self.cursor_position = 0
+
     ui._engine._buffer = _Buf()
     ui._engine._buffer.text = "/image"
     ui._engine._buffer.cursor_position = 6
@@ -264,22 +272,22 @@ def test_streaming_commits_at_blank_line_and_labels_once() -> None:
     ui._engine._print_committed = committed.append
     with ui.streaming("assistant") as out:
         out.write("Para one.\n\n")
-        assert len(committed) == 1            # finalized block commits at the blank line
+        assert len(committed) == 1  # finalized block commits at the blank line
         out.write("Para two, still going")
-        assert len(committed) == 1            # partial tail stays live, not committed
-        assert ui._engine.live                # streaming cell still live
-    assert len(committed) == 2                # remainder commits on close
-    assert ui._engine.live == []              # streaming cell removed once drained
-    assert committed[0].label is True         # first chunk carries the role label
-    assert committed[1].label is False        # continuation chunk does not repeat it
+        assert len(committed) == 1  # partial tail stays live, not committed
+        assert ui._engine.live  # streaming cell still live
+    assert len(committed) == 2  # remainder commits on close
+    assert ui._engine.live == []  # streaming cell removed once drained
+    assert committed[0].label is True  # first chunk carries the role label
+    assert committed[1].label is False  # continuation chunk does not repeat it
 
 
 def test_safe_boundary_never_splits_inside_a_code_fence() -> None:
     from xli.cells import _safe_boundary
 
-    open_fence = "```python\nx = 1\n\ny = 2\n"     # blank line is INSIDE an open fence
+    open_fence = "```python\nx = 1\n\ny = 2\n"  # blank line is INSIDE an open fence
     assert _safe_boundary(open_fence) == 0
-    closed = "```python\nx = 1\n```\n\n"            # fence closed, then blank line
+    closed = "```python\nx = 1\n```\n\n"  # fence closed, then blank line
     assert _safe_boundary(closed) == len(closed)
 
 
@@ -301,14 +309,14 @@ def test_pet_frames_resolution() -> None:
     assert frames(None) is None
     assert isinstance(frames("cat"), list) and frames("cat")
     assert frames(["a", "b"]) == ["a", "b"]
-    assert frames("nonexistent") == frames("cat")   # unknown name -> default
+    assert frames("nonexistent") == frames("cat")  # unknown name -> default
 
 
 def test_pet_advances_on_tick() -> None:
     ui = xli.UI(pet="cat")
     eng = ui._engine
     assert eng._pet_i == 0
-    for _ in range(6):           # pet steps roughly every 6 ticks (~0.6s)
+    for _ in range(6):  # pet steps roughly every 6 ticks (~0.6s)
         eng.tick()
     assert eng._pet_i == 1
     assert eng._pet_fragment()[0] == "class:pet"

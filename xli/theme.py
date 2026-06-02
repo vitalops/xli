@@ -72,16 +72,16 @@ class Theme:
     # solid backgrounds for chrome (see docs/theme.md): separation comes from font
     # color + a thin rule, so the UI reads "light" and terminal-native.
     prompt_glyph: str = ">"
-    prompt_color: str = "bold cyan"            # foreground of the glyph
-    prompt_bg: str = ""                         # no background block
-    prompt_text_color: str = "default"          # typed text uses the terminal's own fg
-    command_color: str = "bold cyan"            # a recognized /command in the composer
+    prompt_color: str = "bold cyan"  # foreground of the glyph
+    prompt_bg: str = ""  # no background block
+    prompt_text_color: str = "default"  # typed text uses the terminal's own fg
+    command_color: str = "bold cyan"  # a recognized /command in the composer
     multiline_continuation: str = "  "
 
     # --- borders / spacing ---
     use_borders: bool = False
     panel_border: str = "rounded"  # if use_borders is True
-    item_spacing: int = 1           # blank lines between transcript items
+    item_spacing: int = 1  # blank lines between transcript items
 
     # --- status bar ---
     status_separator: str = "  ·  "

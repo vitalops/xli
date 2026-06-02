@@ -91,7 +91,9 @@ class Engine:
 
         # dispatch / turn state
         self.queue: asyncio.Queue[str] = asyncio.Queue()
-        self._pending: list[str] = []   # queued prompts, shown as type-ahead in the live tail
+        self._pending: list[str] = (
+            []
+        )  # queued prompts, shown as type-ahead in the live tail
         self._current: asyncio.Task | None = None
         self._handler: Handler | None = None
         self._on_interrupt: InterruptHook | None = None
@@ -129,7 +131,7 @@ class Engine:
         if isinstance(cell, StreamingCell):
             self._drain_stream(cell)
             if cell._closed:
-                if cell in self.live:        # fully drained into committed chunks
+                if cell in self.live:  # fully drained into committed chunks
                     self.live.remove(cell)
                 self._invalidate()
                 return
@@ -146,10 +148,14 @@ class Engine:
             if block is None:
                 break
             if not block.strip():
-                continue                      # whitespace-only boundary; skip
+                continue  # whitespace-only boundary; skip
             self.emit(
-                MessageCell(cell.role, block.strip("\n"), markdown=cell.markdown,
-                            label=cell.consume_label()),
+                MessageCell(
+                    cell.role,
+                    block.strip("\n"),
+                    markdown=cell.markdown,
+                    label=cell.consume_label(),
+                ),
                 live=False,
             )
 
@@ -175,8 +181,10 @@ class Engine:
                 self_.cell = SpinnerCell(label)
                 engine.emit(self_.cell, live=True)
                 return self_.cell
+
             def __exit__(self_, *exc):
                 self_.cell.remove()
+
         return _Working()
 
     # ------------------------------------------------------- dispatch
@@ -206,7 +214,7 @@ class Engine:
         while not self._exit.is_set():
             text = await self.queue.get()
             if self._pending:
-                self._pending.pop(0)        # it's now running -> stop showing it queued
+                self._pending.pop(0)  # it's now running -> stop showing it queued
             assert self._handler is not None
             cancelled = False
             started = time.monotonic()
@@ -250,12 +258,12 @@ class Engine:
         """
         for cell in list(self.live):
             if isinstance(cell, SpinnerCell):
-                self.live.remove(cell)      # transient; its CM normally removes it
+                self.live.remove(cell)  # transient; its CM normally removes it
                 continue
             if cancelled and isinstance(cell, ToolCell) and cell.status == "running":
                 cell.status = "cancelled"
                 cell.version += 1
-            self._commit(cell)              # graduate leftovers to scrollback
+            self._commit(cell)  # graduate leftovers to scrollback
 
     def interrupt(self) -> bool:
         if self.busy:
@@ -269,7 +277,7 @@ class Engine:
         for c in spinners:
             c.tick()
         dirty = dirty or bool(spinners)
-        if self._pet:                       # advance the ambient pet ~every 0.6s
+        if self._pet:  # advance the ambient pet ~every 0.6s
             self._pet_ticks = (self._pet_ticks + 1) % 6
             if self._pet_ticks == 0:
                 self._pet_i = (self._pet_i + 1) % len(self._pet)
@@ -319,12 +327,20 @@ class Engine:
         if self._intro:
             parts.append(Text(self._intro, style=t.muted_color))
         else:
-            parts.append(Text("Type a message (use @ to mention a file), or a command:",
-                               style=t.muted_color))
+            parts.append(
+                Text(
+                    "Type a message (use @ to mention a file), or a command:",
+                    style=t.muted_color,
+                )
+            )
             names = "  ".join(f"/{c.name}" for c in self._slash.all())
             if names:
                 parts.append(Text("  " + names, style=t.muted_color))
-        parts.append(Text("/help for details · esc interrupts · ctrl-d quits", style=t.muted_color))
+        parts.append(
+            Text(
+                "/help for details · esc interrupts · ctrl-d quits", style=t.muted_color
+            )
+        )
         lines = render_to_ansi(Group(*parts), width)
         lines.append("")  # breathing room between the welcome and the input dock
         return lines
@@ -337,7 +353,7 @@ class Engine:
 
     async def _pick(self, options: list[tuple[str, str]]) -> str | None:
         """Run an inline arrow-selectable picker; return the chosen key (None on esc)."""
-        if not options:                       # nothing to choose -> don't open a dead picker
+        if not options:  # nothing to choose -> don't open a dead picker
             return None
         fut: asyncio.Future[str | None] = asyncio.get_running_loop().create_future()
         self._picker = _Picker(options, fut)
@@ -348,13 +364,17 @@ class Engine:
             self._picker = None
             self._invalidate()
 
-    async def approve(self, *, title: str, body: str = "", reason: str = "") -> Decision:
+    async def approve(
+        self, *, title: str, body: str = "", reason: str = ""
+    ) -> Decision:
         self.emit(ApprovalCell(title, body, reason), live=False)
-        key = await self._pick([
-            ("approved", "Yes"),
-            ("approved_for_session", "Yes, and don't ask again"),
-            ("denied", "No"),
-        ])
+        key = await self._pick(
+            [
+                ("approved", "Yes"),
+                ("approved_for_session", "Yes, and don't ask again"),
+                ("denied", "No"),
+            ]
+        )
         decision: Decision = key if key is not None else "aborted"  # type: ignore[assignment]
         approved = decision in ("approved", "approved_for_session")
         color = self.theme.success_color if approved else self.theme.error_color
@@ -364,8 +384,13 @@ class Engine:
     async def confirm(self, question: str) -> bool:
         self.emit(NoteCell(question), live=False)
         result = await self._pick([("yes", "Yes"), ("no", "No")]) == "yes"
-        self._commit_result(*(("✓ yes", self.theme.success_color) if result
-                              else ("✗ no", self.theme.error_color)))
+        self._commit_result(
+            *(
+                ("✓ yes", self.theme.success_color)
+                if result
+                else ("✗ no", self.theme.error_color)
+            )
+        )
         return result
 
     async def choose(self, title: str, options: list[tuple[str, str]]) -> str | None:
@@ -373,13 +398,17 @@ class Engine:
             self.emit(NoteCell(title), live=False)
         key = await self._pick(options)
         if key is not None:
-            self._commit_result(f"→ {dict(options).get(key, key)}", self.theme.muted_color)
+            self._commit_result(
+                f"→ {dict(options).get(key, key)}", self.theme.muted_color
+            )
         return key
 
     async def capture_line(self, prompt: str) -> str | None:
         # The composer is the input; record the prompt, then capture the next line.
-        self.emit(NoteCell(f"{prompt}\n  type your answer below, then enter · esc to cancel"),
-                  live=False)
+        self.emit(
+            NoteCell(f"{prompt}\n  type your answer below, then enter · esc to cancel"),
+            live=False,
+        )
         self._line = asyncio.get_running_loop().create_future()
         try:
             value = await self._line
@@ -400,11 +429,17 @@ class Engine:
         for i, (_key, label) in enumerate(p.options):
             chosen = i == p.index
             row = Text()
-            row.append(f" {'›' if chosen else ' '} {i + 1}. ",
-                       style=self.theme.command_color if chosen else self.theme.muted_color)
+            row.append(
+                f" {'›' if chosen else ' '} {i + 1}. ",
+                style=self.theme.command_color if chosen else self.theme.muted_color,
+            )
             row.append(label, style=self.theme.command_color if chosen else "default")
             rows.append(row)
-        rows.append(Text("  ↑↓ select · enter confirm · esc cancel", style=self.theme.muted_color))
+        rows.append(
+            Text(
+                "  ↑↓ select · enter confirm · esc cancel", style=self.theme.muted_color
+            )
+        )
         return render_to_ansi(Group(*rows), width)
 
     # ------------------------------------------------------- lifecycle
@@ -423,7 +458,7 @@ class Engine:
         app = self._build_app()
         self._app = app
         self._invalidate = app.invalidate
-        self._set_title(working=False)   # initial idle window title
+        self._set_title(working=False)  # initial idle window title
         # No printed banner — the empty-state intro (in the live region) is the welcome,
         # and it gets out of the way once the first message lands.
 
@@ -431,13 +466,14 @@ class Engine:
             width = max(20, shutil.get_terminal_size((80, 24)).columns)
             raw = getattr(cell, "raw_emit", None)
             escape = raw(width) if raw is not None else None
-            if escape is not None:        # graphics-protocol image: print the escape as-is
+            if escape is not None:  # graphics-protocol image: print the escape as-is
                 print(escape)
             else:
                 for ln in cell.lines(width, self.theme):
                     print(ln)
             for _ in range(self.theme.item_spacing):
                 print()
+
         self._print_committed = printer
 
         async def ticker() -> None:
@@ -452,7 +488,9 @@ class Engine:
         finally:
             for t in tasks:
                 t.cancel()
-            await asyncio.gather(*tasks, return_exceptions=True)  # clean shutdown, no hang
+            await asyncio.gather(
+                *tasks, return_exceptions=True
+            )  # clean shutdown, no hang
 
     # ------------------------------------------------------- completion (/ and @)
     #
@@ -500,7 +538,10 @@ class Engine:
             return None, []
         kind, prefix = ctx[0], ctx[1]
         if kind == "slash":
-            items = [(f"/{c.name}", c.name, c.description) for c in self._slash.match("/" + prefix)]
+            items = [
+                (f"/{c.name}", c.name, c.description)
+                for c in self._slash.match("/" + prefix)
+            ]
         else:
             items = [(p, p, "") for p in self._file_search(prefix)]
         return ctx, items
@@ -521,8 +562,10 @@ class Engine:
         for i, (label, _value, meta) in enumerate(items):
             chosen = i == sel
             row = Text()
-            row.append(f" {'›' if chosen else ' '} ",
-                       style=t.command_color if chosen else t.muted_color)
+            row.append(
+                f" {'›' if chosen else ' '} ",
+                style=t.command_color if chosen else t.muted_color,
+            )
             row.append(label, style=t.command_color if chosen else t.muted_color)
             if meta:
                 row.append(f"   {meta}", style=t.muted_color)
@@ -543,31 +586,47 @@ class Engine:
         kind, _prefix, start, end = ctx
         buf = self._buffer
         if kind == "slash":
-            if submit:                                   # enter -> run it
-                buf.reset()                              # type: ignore[union-attr]
+            if submit:  # enter -> run it
+                buf.reset()  # type: ignore[union-attr]
                 self.submit_turn(f"/{value}")
-            else:                                        # tab -> fill it in
-                buf.text = f"/{value} "                  # type: ignore[union-attr]
-                buf.cursor_position = len(buf.text)      # type: ignore[union-attr]
-        else:                                            # file: insert "@path ", keep composing
-            text = buf.text                              # type: ignore[union-attr]
+            else:  # tab -> fill it in
+                buf.text = f"/{value} "  # type: ignore[union-attr]
+                buf.cursor_position = len(buf.text)  # type: ignore[union-attr]
+        else:  # file: insert "@path ", keep composing
+            text = buf.text  # type: ignore[union-attr]
             insert = f"@{value} "
             buf.text = text[:start] + insert + text[end:]  # type: ignore[union-attr]
-            buf.cursor_position = start + len(insert)    # type: ignore[union-attr]
+            buf.cursor_position = start + len(insert)  # type: ignore[union-attr]
 
     # ------------------------------------------------------- file search (@mentions)
     _IGNORE_DIRS = {
-        ".git", "node_modules", "__pycache__", ".venv", "venv", "dist", "build",
-        ".mypy_cache", ".pytest_cache", ".idea", ".tox", "target", ".next",
+        ".git",
+        "node_modules",
+        "__pycache__",
+        ".venv",
+        "venv",
+        "dist",
+        "build",
+        ".mypy_cache",
+        ".pytest_cache",
+        ".idea",
+        ".tox",
+        "target",
+        ".next",
     }
 
     def _all_files(self) -> list[str]:
         if self._file_cache is None:
             import os
+
             files: list[str] = []
             root = os.getcwd()
             for dp, dns, fns in os.walk(root):
-                dns[:] = [d for d in dns if d not in self._IGNORE_DIRS and not d.startswith(".")]
+                dns[:] = [
+                    d
+                    for d in dns
+                    if d not in self._IGNORE_DIRS and not d.startswith(".")
+                ]
                 for fn in fns:
                     files.append(os.path.relpath(os.path.join(dp, fn), root))
                     if len(files) >= 20000:
@@ -598,8 +657,12 @@ class Engine:
         # once a command is fully (exactly) typed. History persists across sessions when a
         # history_file is given; ↑/↓ navigate it (prompt_toolkit's default bindings).
         from pathlib import Path
-        history = (FileHistory(str(Path(self._history_file).expanduser()))
-                   if self._history_file else InMemoryHistory())
+
+        history = (
+            FileHistory(str(Path(self._history_file).expanduser()))
+            if self._history_file
+            else InMemoryHistory()
+        )
         buffer = Buffer(
             multiline=True,
             history=history,
@@ -612,69 +675,92 @@ class Engine:
         def _ansi_content(lines: list[str]) -> UIContent:
             return UIContent(
                 get_line=lambda i: to_formatted_text(ANSI(lines[i])),
-                line_count=len(lines), show_cursor=False,
+                line_count=len(lines),
+                show_cursor=False,
             )
 
         class LiveTail(UIControl):
             def _lines(self, width):
-                if (not engine.committed and not engine.live
-                        and not engine._pending and engine._picker is None):
-                    return engine.intro_lines(width)        # empty-state welcome
+                if (
+                    not engine.committed
+                    and not engine.live
+                    and not engine._pending
+                    and engine._picker is None
+                ):
+                    return engine.intro_lines(width)  # empty-state welcome
                 out: list[str] = []
                 for cell in engine.live:
                     out.extend(cell.lines(width, engine.theme))
-                out.extend(engine._picker_lines(width))     # arrow-select modal
-                for text in engine._pending:                # type-ahead, shown muted
-                    out.extend(render_to_ansi(
-                        Text(f"⋯ {text}", style=engine.theme.muted_color), width))
+                out.extend(engine._picker_lines(width))  # arrow-select modal
+                for text in engine._pending:  # type-ahead, shown muted
+                    out.extend(
+                        render_to_ansi(
+                            Text(f"⋯ {text}", style=engine.theme.muted_color), width
+                        )
+                    )
                 return out
 
             def create_content(self, width, height):
                 return _ansi_content(self._lines(width))
 
             # required so dont_extend_height sizes the window to its content (not 0)
-            def preferred_height(self, width, max_available_height, wrap_lines, get_line_prefix):
+            def preferred_height(
+                self, width, max_available_height, wrap_lines, get_line_prefix
+            ):
                 return len(self._lines(width))
 
         class Suggest(UIControl):
             def create_content(self, width, height):
                 return _ansi_content(engine._suggest_lines(width))
 
-            def preferred_height(self, width, max_available_height, wrap_lines, get_line_prefix):
+            def preferred_height(
+                self, width, max_available_height, wrap_lines, get_line_prefix
+            ):
                 return len(engine._suggest_lines(width))
 
         def status_left():
             frags: list[tuple[str, str]] = [
-                ("class:status.busy" if engine.busy else "class:status.idle",
-                 " working" if engine.busy else " idle")]
+                (
+                    "class:status.busy" if engine.busy else "class:status.idle",
+                    " working" if engine.busy else " idle",
+                )
+            ]
             body = engine._status.render()
             if body:
                 frags.append(("class:status", "  ·  "))
                 frags.extend(("class:status", t) for _, t in body)
-            frags.append(("class:status", "   enter send · esc interrupt · ctrl-d quit"))
+            frags.append(
+                ("class:status", "   enter send · esc interrupt · ctrl-d quit")
+            )
             return frags
 
         class Status(UIControl):
             def create_content(self, width, height):
                 frags = list(status_left())
                 pet = engine._pet_fragment()
-                if pet:                                  # park the pet bottom-right
+                if pet:  # park the pet bottom-right
                     used = sum(len(t) for _s, t in frags) + len(pet[1])
                     frags.append(("class:status", " " * max(1, width - used)))
                     frags.append(pet)
-                return UIContent(get_line=lambda i: frags, line_count=1, show_cursor=False)
+                return UIContent(
+                    get_line=lambda i: frags, line_count=1, show_cursor=False
+                )
 
         # dont_extend_height keeps every region sized to its CONTENT — without it a
         # flexible window (composer) greedily absorbs vertical slack and pads blank
         # lines below the input.
-        live_win = Window(content=LiveTail(), height=Dimension(min=0), dont_extend_height=True)
+        live_win = Window(
+            content=LiveTail(), height=Dimension(min=0), dont_extend_height=True
+        )
         sep_win = Window(height=1, char="─", style="class:sep")
         composer_win = Window(
             content=BufferControl(buffer=buffer, lexer=SlashLexer(self._slash)),
             height=Dimension(min=1),
             wrap_lines=True,
             dont_extend_height=True,
-            get_line_prefix=lambda *a: [("class:prompt", f" {self.theme.prompt_glyph} ")],
+            get_line_prefix=lambda *a: [
+                ("class:prompt", f" {self.theme.prompt_glyph} ")
+            ],
         )
         status_win = Window(content=Status(), height=1)
 
@@ -693,8 +779,8 @@ class Engine:
             key_bindings=self._key_bindings(),
             style=self._style(),
             full_screen=False,
-            mouse_support=False,        # keep native text selection working
-            refresh_interval=0.1,       # steady repaint for live animations
+            mouse_support=False,  # keep native text selection working
+            refresh_interval=0.1,  # steady repaint for live animations
         )
 
     def _key_bindings(self) -> KeyBindings:
@@ -704,13 +790,13 @@ class Engine:
         picking = Condition(lambda: engine._picker is not None)
         capturing = Condition(lambda: engine._line is not None)
         suggesting = Condition(lambda: engine._suggest_visible())
-        composing = ~picking & ~capturing            # normal composer-editing context
+        composing = ~picking & ~capturing  # normal composer-editing context
 
         # --- line capture (ui.input) ---
         @kb.add("enter", filter=capturing)
         def _(event):
             text = engine._buffer.text  # type: ignore[union-attr]
-            engine._buffer.reset()      # type: ignore[union-attr]
+            engine._buffer.reset()  # type: ignore[union-attr]
             if engine._line and not engine._line.done():
                 engine._line.set_result(text)
 
@@ -741,6 +827,7 @@ class Engine:
                 p = engine._picker
                 if p and d - 1 < len(p.options):
                     p.resolve(p.options[d - 1][0])
+
         for _d in range(1, 10):
             _digit(_d)
 
@@ -767,11 +854,11 @@ class Engine:
             text = engine._buffer.text.rstrip()  # type: ignore[union-attr]
             if text:
                 engine._buffer.append_to_history()  # persist for ↑/↓ recall
-            engine._buffer.reset()                # type: ignore[union-attr]
+            engine._buffer.reset()  # type: ignore[union-attr]
             if text:
                 engine.submit_turn(text)
 
-        @kb.add("c-j")          # newline (also alt+enter)
+        @kb.add("c-j")  # newline (also alt+enter)
         @kb.add("escape", "enter")
         def _(event):
             event.current_buffer.insert_text("\n")
@@ -779,11 +866,11 @@ class Engine:
         @kb.add("escape", eager=True)
         def _(event):
             if engine._picker is not None:
-                engine._picker.resolve(None)          # cancel the choice
+                engine._picker.resolve(None)  # cancel the choice
             elif engine._line is not None:
                 _resolve(engine._line, None)
             elif engine._suggest_visible():
-                engine._suggest_dismissed = True      # close the command list
+                engine._suggest_dismissed = True  # close the command list
             else:
                 engine.interrupt()
 
@@ -802,22 +889,24 @@ class Engine:
         prompt = _to_pt(t.prompt_color)
         if t.prompt_bg:
             prompt = f"{prompt} bg:{t.prompt_bg}"
-        return Style.from_dict({
-            "sep": _to_pt(t.muted_color),
-            "prompt": prompt or "",
-            "slash": _to_pt(t.command_color),
-            "status": _to_pt(t.status_color),
-            "status.busy": f"{_to_pt(t.warning_color)} bold",
-            "status.idle": _to_pt(t.success_color),
-            "pet": _to_pt(t.muted_color),
-        })
+        return Style.from_dict(
+            {
+                "sep": _to_pt(t.muted_color),
+                "prompt": prompt or "",
+                "slash": _to_pt(t.command_color),
+                "status": _to_pt(t.status_color),
+                "status.busy": f"{_to_pt(t.warning_color)} bold",
+                "status.idle": _to_pt(t.success_color),
+                "pet": _to_pt(t.muted_color),
+            }
+        )
 
 
 class _Picker:
     """Transient arrow-selectable choice list, rendered in the live region."""
 
     def __init__(self, options: list[tuple[str, str]], future: asyncio.Future) -> None:
-        self.options = list(options)   # [(key, label), ...]
+        self.options = list(options)  # [(key, label), ...]
         self.index = 0
         self.future = future
 
@@ -846,13 +935,25 @@ _DECISION = {
 
 # Rich color name -> prompt_toolkit style fragment (best effort; unknowns pass through).
 _ANSI = {
-    "black": "ansiblack", "red": "ansired", "green": "ansigreen", "yellow": "ansiyellow",
-    "blue": "ansiblue", "magenta": "ansimagenta", "cyan": "ansicyan", "white": "ansiwhite",
-    "grey50": "ansibrightblack", "grey46": "ansibrightblack", "bright_black": "ansibrightblack",
-    "bright_red": "ansibrightred", "bright_green": "ansibrightgreen",
-    "bright_yellow": "ansibrightyellow", "bright_blue": "ansibrightblue",
-    "bright_magenta": "ansibrightmagenta", "bright_cyan": "ansibrightcyan",
-    "bright_white": "ansibrightwhite", "default": "",
+    "black": "ansiblack",
+    "red": "ansired",
+    "green": "ansigreen",
+    "yellow": "ansiyellow",
+    "blue": "ansiblue",
+    "magenta": "ansimagenta",
+    "cyan": "ansicyan",
+    "white": "ansiwhite",
+    "grey50": "ansibrightblack",
+    "grey46": "ansibrightblack",
+    "bright_black": "ansibrightblack",
+    "bright_red": "ansibrightred",
+    "bright_green": "ansibrightgreen",
+    "bright_yellow": "ansibrightyellow",
+    "bright_blue": "ansibrightblue",
+    "bright_magenta": "ansibrightmagenta",
+    "bright_cyan": "ansibrightcyan",
+    "bright_white": "ansibrightwhite",
+    "default": "",
 }
 
 

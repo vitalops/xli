@@ -51,7 +51,7 @@ def test_iterm_escape_structure():
     esc = images.iterm_escape(_img(), cols=10, rows=5)
     assert esc.startswith("\033]1337;File=inline=1;width=10;height=5")
     assert esc.endswith("\a")
-    assert "preserveAspectRatio=1:" in esc and len(esc) > 40   # carries base64 payload
+    assert "preserveAspectRatio=1:" in esc and len(esc) > 40  # carries base64 payload
 
 
 def test_kitty_escape_structure_and_chunking():
@@ -71,7 +71,7 @@ def test_image_cell_raw_emit_halfblock_is_none(monkeypatch):
     monkeypatch.setenv("XLI_IMAGE_PROTOCOL", "halfblock")
     images._protocol = None
     cell = ImageCell(_img())
-    assert cell.raw_emit(80) is None          # -> falls back to half-block lines
+    assert cell.raw_emit(80) is None  # -> falls back to half-block lines
 
 
 def test_image_cell_raw_emit_graphics(monkeypatch):
@@ -92,7 +92,7 @@ def test_image_cell_without_pillow_shows_hint(monkeypatch):
     import xli
 
     cell = ImageCell("x.png")
-    monkeypatch.setattr(cell, "_load", lambda: None)   # simulate Pillow missing
-    assert cell.raw_emit(80) is None                   # -> no graphics escape
+    monkeypatch.setattr(cell, "_load", lambda: None)  # simulate Pillow missing
+    assert cell.raw_emit(80) is None  # -> no graphics escape
     rendered = "\n".join(cell.lines(60, xli.CODEX))
-    assert "Pillow" in rendered                         # friendly hint, not a crash
+    assert "Pillow" in rendered  # friendly hint, not a crash

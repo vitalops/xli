@@ -58,7 +58,7 @@ def test_boxed_theme_renders_panel_without_crashing() -> None:
     # kwarg to rich.Panel — it must render a bordered message cleanly.
     out = _render(render_message("hi there", role="assistant", theme=BOXED))
     assert "hi there" in out
-    assert "─" in out or "╭" in out          # some box drawing present
+    assert "─" in out or "╭" in out  # some box drawing present
 
 
 # ---------------------------------------------------------------------------
@@ -68,7 +68,9 @@ def test_boxed_theme_renders_panel_without_crashing() -> None:
 
 def test_tool_call_shell_shows_command() -> None:
     text = _render(
-        render_tool("shell", args={"command": ["ls", "-la"]}, output="total 48", theme=CODEX)
+        render_tool(
+            "shell", args={"command": ["ls", "-la"]}, output="total 48", theme=CODEX
+        )
     )
     assert "shell" in text
     assert "ls -la" in text
@@ -102,7 +104,9 @@ def test_tool_with_no_output_renders_title_only() -> None:
 
 
 def test_tool_truncates_long_output() -> None:
-    text = _render(render_tool("shell", args={"command": ["x"]}, output="x" * 20000, theme=CODEX))
+    text = _render(
+        render_tool("shell", args={"command": ["x"]}, output="x" * 20000, theme=CODEX)
+    )
     # Output gets clipped to ~8000 chars; the printed text contains an ellipsis
     assert "…" in text
 

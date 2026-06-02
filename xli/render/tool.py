@@ -35,7 +35,9 @@ def render_tool(
     theme: Theme,
 ) -> RenderableType:
     args = args or {}
-    title = _title_for(name, args, theme=theme, errored=error is not None, status=status)
+    title = _title_for(
+        name, args, theme=theme, errored=error is not None, status=status
+    )
     if output is None and error is None:
         return title
     body_text = _body_for(output, error)
@@ -49,7 +51,12 @@ def render_tool(
 
 
 def _title_for(
-    name: str, args: dict[str, Any], *, theme: Theme, errored: bool, status: str | None = None
+    name: str,
+    args: dict[str, Any],
+    *,
+    theme: Theme,
+    errored: bool,
+    status: str | None = None,
 ) -> Text:
     # Status drives the gutter glyph + accent so a card reads at a glance as it
     # moves running -> done. When no status is given we keep the plain tool glyph
@@ -74,7 +81,9 @@ def _title_for(
 
 def _summary_for(name: str, args: dict[str, Any]) -> str:
     if name == "shell":
-        return _truncate(" ".join(args.get("command", []) or args.get("argv", [])), _MAX_TITLE_DETAIL)
+        return _truncate(
+            " ".join(args.get("command", []) or args.get("argv", [])), _MAX_TITLE_DETAIL
+        )
     if name == "apply_patch":
         patch = args.get("patch", "")
         n = (
@@ -99,10 +108,16 @@ def _summary_for(name: str, args: dict[str, Any]) -> str:
     if name == "task":
         sub = args.get("subagent_type", "")
         desc = args.get("description", "")
-        return _truncate(f"[{sub}] {desc}".strip(), _MAX_TITLE_DETAIL) if (sub or desc) else ""
+        return (
+            _truncate(f"[{sub}] {desc}".strip(), _MAX_TITLE_DETAIL)
+            if (sub or desc)
+            else ""
+        )
     # generic fallback
     if args:
-        return _truncate(json.dumps(args, default=str, separators=(",", ":")), _MAX_TITLE_DETAIL)
+        return _truncate(
+            json.dumps(args, default=str, separators=(",", ":")), _MAX_TITLE_DETAIL
+        )
     return ""
 
 

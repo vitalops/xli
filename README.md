@@ -1,6 +1,15 @@
+<div align="center">
+
 # xli
 
-**Build polished, transcript-style terminal interfaces for chat / agent / REPL-ish apps in 20 lines of Python.**
+**Build polished, transcript-style terminal UIs for chat, agent, and REPL apps — in ~20 lines of Python.** ✨
+
+[![PyPI](https://img.shields.io/pypi/v/xli.svg)](https://pypi.org/project/xli/)
+[![Python](https://img.shields.io/pypi/pyversions/xli.svg)](https://pypi.org/project/xli/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Built on rich + prompt_toolkit](https://img.shields.io/badge/built%20on-rich%20%2B%20prompt__toolkit-8a2be2.svg)](#-credits)
+
+</div>
 
 ```python
 import xli
@@ -16,64 +25,93 @@ async def reply(prompt: str) -> None:
 ui.run()
 ```
 
-That gets you: markdown-rendered streaming responses, slash-command autocomplete, `@file`
-mentions, multi-line input (Enter sends, Alt+Enter for newlines), persistent history, a themed
-status bar, arrow-selectable prompts, inline approvals — and a terminal that *feels right*.
+That little snippet gets you: markdown-rendered **streaming** responses, slash-command
+autocomplete, `@file` mentions, multi-line input (Enter sends, Alt+Enter for newlines),
+persistent history, a themed status bar, arrow-selectable prompts, inline approvals — and a
+terminal that *feels right*. 🪄
 
-Crucially, the transcript flows into your terminal's **normal scrollback**, so text stays
-**selectable, scrollable, and searchable** with your terminal's own tools. xli doesn't take
-over the screen.
+And the best part: the transcript flows into your terminal's **normal scrollback**, so text stays
+**selectable, scrollable, and searchable** with your terminal's own tools. xli doesn't take over
+the screen.
 
 ---
 
-## What it is
+## ✨ Highlights
 
-A small, opinionated library for one specific job: **interactive agent / chat-style terminal
-apps where output is a flowing transcript, not an app screen.**
+- 📜 **Real scrollback, not a screen takeover.** Finalized output is printed into your terminal's
+  native scrollback — select, scroll, and find all work the way they always do.
+- 🌊 **Streaming markdown** that appears token-by-token, then settles into properly-rendered text.
+- 🃏 **Mutable cards.** A tool call flips from `running` → `done` *in place*; a plan's checkboxes
+  tick off live — via a handle you hold and update from anywhere.
+- ⌨️ **A real composer.** Multi-line input, slash-command autocomplete, `@file` mentions, history,
+  and paste handling out of the box.
+- ✅ **Inline approvals, pickers & wizards** — arrow-selectable, no modal screen-takeover, and they
+  block your agent until the user answers.
+- ⏸️ **Type-ahead & ESC-to-interrupt** while the agent is working, with cooperative `asyncio`
+  cancellation.
+- 🎨 **Themeable** via plain dataclasses — minimal/glyph-driven by default, boxed if you insist.
+- 🪶 **Tiny surface, two deps.** Wraps [rich](https://github.com/Textualize/rich) for rendering and
+  [prompt_toolkit](https://github.com/prompt-toolkit/python-prompt-toolkit) for input. No build steps.
+
+## 🤔 What it is
+
+A small, opinionated library for **one specific job**: interactive agent / chat-style terminal apps
+where output is a *flowing transcript*, not an app screen.
 
 The pattern xli handles:
 
-- A scrolling transcript of structured cards (user messages, assistant messages, tool calls,
-  diffs, plans, reasoning, images) committed to real scrollback.
-- Streaming markdown that appears as it arrives, then settles into properly-rendered scrollback.
-- A persistent multi-line composer at the bottom with slash-command autocomplete, `@file`
-  mentions, history, and paste handling.
-- **Mutable cards** — a tool call that flips from `running` to `done` in place, a plan whose
-  checkboxes update — via a handle you hold.
-- Inline, arrow-selectable approvals / pickers / wizards that block the agent until resolved.
-- A subtle status bar, an animated "working" spinner, type-ahead while the agent runs, and
-  ESC-to-interrupt.
+- A scrolling transcript of structured cards — user messages, assistant messages, tool calls,
+  diffs, plans, reasoning, images — committed to real scrollback.
+- Streaming markdown that appears as it arrives, then settles into rendered scrollback.
+- A persistent multi-line composer at the bottom with autocomplete, `@file` mentions, and history.
+- **Mutable cards** — a tool card that flips `running` → `done` in place, a plan whose checkboxes
+  update — via a handle you hold.
+- Inline, arrow-selectable approvals / pickers / wizards that block until resolved.
+- A subtle status bar, an animated "working" spinner, type-ahead, and ESC-to-interrupt.
 
-xli wraps two excellent libraries — [**rich**](https://github.com/Textualize/rich) for
-rendering, [**prompt_toolkit**](https://github.com/prompt-toolkit/python-prompt-toolkit) for
-input — into the API you'd actually want to write this kind of program in.
+## 🚫 What it is NOT
 
-## How it works (the one design decision)
+| Not… | Because |
+|---|---|
+| A TUI framework | No widget tree, no CSS, no focus model, no mouse panes. Reach for [Textual](https://github.com/Textualize/textual) when you want a full app screen. |
+| A "richer `print`" | xli is interactive — it owns the event loop. For one-shot static rendering, use [rich](https://github.com/Textualize/rich) directly. |
+| A full-screen app | It renders **inline** so your terminal keeps native scroll / select / find. That's the whole point. |
+| Tied to any LLM / agent framework | It knows nothing about providers. It renders the events *you* emit — OpenAI, Anthropic, LangChain, your own loop, whatever. |
+| A REPL builder | It runs *your* code in response to prompts. For a Python REPL, use [ptpython](https://github.com/prompt-toolkit/ptpython). |
 
-xli renders **inline**, not full-screen. Finalized cells are *printed into your terminal's
-normal scrollback* — so selection, scrolling, and find all come from the terminal itself. Only
-a small **live region** at the bottom (the composer, status bar, an in-progress stream, a
-running tool card, a spinner, a picker) is redrawn.
+## ⚖️ How it compares
 
-A cell is **mutable while it's live** at the bottom; once it finalizes it **commits to
-scrollback** and becomes immutable (but selectable). That two-tier model is what lets xli have
-both editable, animated cards *and* native, selectable scrollback — the thing full-screen TUIs
-give up.
+xli lives in the gap between "low-level rendering toolkit" and "full-screen app framework." If your
+output is a **conversation that scrolls**, that gap is exactly where you want to be.
 
-## Install
+| | xli | [Textual](https://github.com/Textualize/textual) | [rich](https://github.com/Textualize/rich) | [prompt_toolkit](https://github.com/prompt-toolkit/python-prompt-toolkit) | [questionary](https://github.com/tmbo/questionary) |
+|---|---|---|---|---|---|
+| **Shape** | Flowing transcript | Full-screen app | Print / render | Input / REPL | Prompts only |
+| **Native scrollback** | ✅ keeps it | ❌ takes over screen | ✅ (it just prints) | ⚠️ partial | ✅ |
+| **Streaming + mutable cards** | ✅ built-in | ✅ (you wire widgets) | ❌ DIY | ❌ DIY | ❌ |
+| **Composer (multiline, history, `@`, `/`)** | ✅ built-in | 🔧 build from widgets | ❌ | 🔧 primitives | ❌ |
+| **Inline approvals / pickers / wizards** | ✅ built-in | 🔧 build from widgets | ❌ | 🔧 primitives | ✅ (pickers) |
+| **Best for** | Chat / agent transcripts | Dashboards, IDEs, full apps | Static output | Custom REPLs & input | One-off questionnaires |
+
+**In short:** Textual gives you a canvas to build *any* app and asks you to design the whole screen.
+xli gives you *one* app shape — the agent/chat transcript — already assembled, and hands the
+scrollback back to your terminal. If you've been gluing rich + prompt_toolkit together to make a
+chat loop, xli *is* that glue, done well. 🙂
+
+## 📦 Install
 
 ```sh
-pip install xli
+pip install python-xli
 ```
 
 Optional extras:
 
-- `xli[markdown]` — `pygments` for code-block syntax highlighting in messages (recommended).
-- `xli[images]` — `pillow`, for inline images (`ui.image(...)`).
+- `python-xli[markdown]` — `pygments` for code-block syntax highlighting in messages (recommended).
+- `python-xli[images]` — `pillow`, for inline images (`ui.image(...)`).
 
-Two core dependencies (rich, prompt_toolkit). No build steps.
+Two core dependencies (rich, prompt_toolkit). No build steps. Requires Python **3.11+**.
 
-## Quickstart
+## 🚀 Quickstart
 
 A fuller echo agent — streaming, a status field, a tool card that updates in place, and a slash
 command:
@@ -95,7 +133,7 @@ async def handle(prompt: str) -> None:
     turn += 1
     ui.status.set(turn=turn)
 
-    card = ui.tool("think", status="running")      # live, mutable card
+    card = ui.tool("think", status="running")        # live, mutable card
     with ui.working("thinking"):
         await asyncio.sleep(0.5)
     card.update(status="done", output="ok")          # commits to scrollback
@@ -108,7 +146,9 @@ async def handle(prompt: str) -> None:
 ui.run()
 ```
 
-## The vocabulary
+> 💡 Want to see everything at once? `examples/demo.py` exercises every feature in one file.
+
+## 📖 The vocabulary
 
 `xli.UI` exposes a small set of methods you call from any handler. Transcript methods return a
 **cell handle** you can mutate.
@@ -151,11 +191,22 @@ ui.clear_transcript()
 ui.exit()
 ```
 
-## Mutable cards
+## 🧠 The one design decision
 
-The transcript methods return a handle. Hold it, mutate it from anywhere (including across
-`await`s and from other tasks) — it re-renders in place while live, then commits to scrollback
-once it's finalized:
+xli renders **inline**, not full-screen. Finalized cells are *printed into your terminal's normal
+scrollback* — so selection, scrolling, and find all come from the terminal itself. Only a small
+**live region** at the bottom (the composer, status bar, an in-progress stream, a running tool
+card, a spinner, a picker) is redrawn.
+
+A cell is **mutable while it's live** at the bottom; once it finalizes it **commits to scrollback**
+and becomes immutable (but selectable). That two-tier model is what lets xli have both editable,
+animated cards *and* native, selectable scrollback — the thing full-screen TUIs give up.
+
+## 🃏 Mutable cards
+
+The transcript methods return a handle. Hold it, mutate it from anywhere (including across `await`s
+and from other tasks) — it re-renders in place while live, then commits to scrollback once it's
+finalized:
 
 ```python
 card = ui.tool("shell", status="running", args={"command": ["pytest", "-q"]})
@@ -164,10 +215,9 @@ card.update(status="done", output=result)        # ✓ shell … and the output,
 ```
 
 A `ui.tool(...)` **without** a `status` is a one-shot card (committed immediately). With
-`status="running"` it stays live and mutable until you update it to `done` / `error` /
-`cancelled`.
+`status="running"` it stays live and mutable until you update it to `done` / `error` / `cancelled`.
 
-## Slash commands & @file mentions
+## ⌨️ Slash commands & @file mentions
 
 ```python
 @ui.command("model", description="switch model")
@@ -181,18 +231,16 @@ async def cmd_quit(ui, args):
     ui.exit()
 ```
 
-Typing `/` opens a command list **below** the composer (arrow to navigate, Tab to fill, Enter
-to run). Once a command is fully typed it's recognized and recolored. `/help`, `/quit`, and
-`/clear` are built in (override freely).
+Typing `/` opens a command list **below** the composer (arrow to navigate, Tab to fill, Enter to
+run). `/help`, `/quit`, and `/clear` are built in (override freely). Typing `@` opens a **file
+picker** from the working directory; Tab/Enter inserts the path — handy for letting users reference
+files for your agent.
 
-Typing `@` anywhere opens a **file picker** from the working directory; Tab/Enter inserts the
-path into your message — handy for letting users reference files for your agent.
+## ✅ Approvals, pickers, wizards
 
-## Approvals, pickers, wizards
-
-All are inline and arrow-selectable (no modal screen-takeover). The request commits to
-scrollback so it scrolls into view and persists; the choices appear in the live region; the
-outcome is recorded below.
+All are inline and arrow-selectable (no modal screen-takeover). The request commits to scrollback so
+it scrolls into view and persists; the choices appear in the live region; the outcome is recorded
+below.
 
 ```python
 decision = await ui.approve(
@@ -204,11 +252,11 @@ decision = await ui.approve(
 
 `↑/↓` move the highlight, `1`-`9` quick-select, `Enter` confirms, `Esc` cancels.
 
-## Interrupts
+## ⏸️ Interrupts
 
-The composer stays live while your handler runs — users can **type ahead** (queued prompts
-show as muted `⋯` lines) and press **ESC to interrupt** the current turn. Interrupt is
-cooperative `asyncio` cancellation; register cleanup with `@ui.on_interrupt`:
+The composer stays live while your handler runs — users can **type ahead** (queued prompts show as
+muted `⋯` lines) and press **ESC to interrupt** the current turn. Interrupt is cooperative `asyncio`
+cancellation; register cleanup with `@ui.on_interrupt`:
 
 ```python
 @ui.on_interrupt
@@ -218,7 +266,7 @@ async def cleanup():
 
 A running tool card left behind by an interrupted turn is automatically marked `cancelled`.
 
-## Themes
+## 🎨 Themes
 
 ```python
 ui = xli.UI(theme="codex")        # default — minimal, glyph-driven, no borders, no solid bg
@@ -231,25 +279,11 @@ ui = xli.UI(theme=xli.Theme(      # custom — it's a dataclass; override fields
 ))
 ```
 
-Themes are dataclasses — override fields, don't subclass. The default leans "light": chrome is
-font color + thin rules, never solid background blocks. See `docs/theme.md` for the design guide
-you can hand to a coding agent.
+Themes are dataclasses — override fields, don't subclass. The default leans "light": chrome is font
+color + thin rules, never solid background blocks. See [`docs/theme.md`](docs/theme.md) for the
+design guide you can hand to a coding agent.
 
-## Custom event renderers
-
-When you have your own event stream and want one dispatch point:
-
-```python
-@ui.renderer("benchmark")
-def render_benchmark(ui, event):
-    ui.print(make_bar_chart(event["data"]))
-
-ui.dispatch({"type": "benchmark", "data": [...]})
-```
-
-For most things you won't need this — just call `ui.streaming` / `ui.tool` / etc. directly.
-
-## Plugging into an agent
+## 🔌 Plugging into an agent
 
 xli renders the event types you give it. It doesn't care if those come from OpenAI, Anthropic,
 LangChain, or your own framework:
@@ -270,38 +304,61 @@ async def handle(prompt: str) -> None:
             my_agent.respond(event.id, decision)
 ```
 
-(For token-by-token output, wrap a `with ui.streaming("assistant") as out:` block and call
-`out.write(delta)` as deltas arrive.)
+For token-by-token output, wrap a `with ui.streaming("assistant") as out:` block and call
+`out.write(delta)` as deltas arrive. Have your own event stream? Register a custom renderer:
 
-See `examples/demo.py` for one worked example that exercises every feature.
+```python
+@ui.renderer("benchmark")
+def render_benchmark(ui, event):
+    ui.print(make_bar_chart(event["data"]))
 
-## Keys
+ui.dispatch({"type": "benchmark", "data": [...]})
+```
+
+## ⌨️ Keys
 
 ```
-enter            send  (or run highlighted command / select picker option / accept input)
+enter                send  (or run highlighted command / select picker option / accept input)
 alt+enter ⋅ ctrl+j   newline
-↑ / ↓            history  ·  navigate the command/file list  ·  move picker selection
-tab              accept the highlighted completion / insert @file path
-1–9              quick-select a picker option
-esc              cancel a picker/modal or close the list — otherwise interrupt the current turn
-ctrl+c           interrupt        ctrl+d  quit
+↑ / ↓                history · navigate the command/file list · move picker selection
+tab                  accept the highlighted completion / insert @file path
+1–9                  quick-select a picker option
+esc                  cancel a picker/modal or close the list — otherwise interrupt the turn
+ctrl+c               interrupt          ctrl+d  quit
 ```
 
-## What it is NOT
+## 🛠️ Contributing
 
-| Not | Because |
-|---|---|
-| A TUI framework | No widget tree, no CSS, no focus model, no mouse panes. Use [Textual](https://github.com/Textualize/textual) for that. |
-| A "richer print" | xli is interactive — it owns the loop. For static rendering use [rich](https://github.com/Textualize/rich) directly. |
-| A full-screen app | It renders inline so your terminal keeps native scroll / select / find. That's a feature, not a limitation. |
-| Tied to any agent / LLM framework | It knows nothing about LLMs or providers. It renders the events you emit. |
-| A REPL builder | It runs *your* code in response to prompts. For a Python REPL use [ptpython](https://github.com/prompt-toolkit/ptpython). |
+Contributions, bug reports, and ideas are very welcome! 🙌
 
-## Status
+```sh
+git clone https://github.com/fariz/xli
+cd xli
+pip install -e ".[dev,markdown,images]"
+pytest            # run the tests
+ruff check .      # lint
+mypy xli          # type-check
+```
 
-Pre-1.0. The API is stable enough to build on; versions are bumped thoughtfully if anything
-user-facing changes.
+Found a rough edge or have a use case xli doesn't cover cleanly? Open an
+[issue](https://github.com/fariz/xli/issues) — the API is small on purpose, so design
+conversations matter.
 
-## License
+## 📍 Status
 
-MIT.
+**Pre-1.0** (currently `0.2.0`). The API is stable enough to build on; versions are bumped
+thoughtfully if anything user-facing changes.
+
+## 🙏 Credits
+
+xli stands on the shoulders of two excellent libraries:
+
+- [**rich**](https://github.com/Textualize/rich) — all the rendering.
+- [**prompt_toolkit**](https://github.com/prompt-toolkit/python-prompt-toolkit) — all the input.
+
+xli's contribution is the *composition*: the API you'd actually want to write a chat/agent terminal
+app in.
+
+## 📄 License
+
+[MIT](LICENSE) © xli contributors

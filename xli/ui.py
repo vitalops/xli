@@ -76,9 +76,14 @@ class UI:
         self._renderers: dict[str, EventRenderer] = {}
         self._register_builtin_commands()
         self._engine = Engine(
-            theme=self.theme, slash=self._slash, status=self.status,
-            title=title, intro=intro, history_file=history_file,
-            pet=pet_frames(pet), notify_after=notify_after,
+            theme=self.theme,
+            slash=self._slash,
+            status=self.status,
+            title=title,
+            intro=intro,
+            history_file=history_file,
+            pet=pet_frames(pet),
+            notify_after=notify_after,
         )
 
     # ----------------------------------------------------- decorators
@@ -97,21 +102,34 @@ class UI:
         return fn
 
     def command(
-        self, name: str, *, description: str = "", aliases: Sequence[str] = (),
+        self,
+        name: str,
+        *,
+        description: str = "",
+        aliases: Sequence[str] = (),
     ) -> Callable[[Handler], Handler]:
         """Register a slash command: ``@ui.command("model", description=...)``."""
+
         def decorator(fn: Handler) -> Handler:
             self._slash.register(
-                SlashCommand(name=name, handler=fn, description=description, aliases=tuple(aliases))
+                SlashCommand(
+                    name=name,
+                    handler=fn,
+                    description=description,
+                    aliases=tuple(aliases),
+                )
             )
             return fn
+
         return decorator
 
     def renderer(self, event_type: str) -> Callable[[EventRenderer], EventRenderer]:
         """Register a custom renderer for events dispatched via ``ui.dispatch``."""
+
         def decorator(fn: EventRenderer) -> EventRenderer:
             self._renderers[event_type] = fn
             return fn
+
         return decorator
 
     # ----------------------------------------------------- transcript API
@@ -127,7 +145,9 @@ class UI:
 
     def header(self, text: str) -> Cell:
         """A single muted banner line for runtime context (e.g. ``app · model · mode``)."""
-        return self._engine.emit(CustomCell(Text(text, style=self.theme.muted_color)), live=False)
+        return self._engine.emit(
+            CustomCell(Text(text, style=self.theme.muted_color)), live=False
+        )
 
     def note(self, text: str) -> Cell:
         """Single muted ``· line`` — good for status updates."""
@@ -176,9 +196,9 @@ class UI:
     def streaming(self, role: str, *, markdown: bool | None = None) -> Streaming:
         """Context manager for streamed text. Renders live, commits on exit::
 
-            with ui.streaming("assistant") as out:
-                for chunk in chunks:
-                    out.write(chunk)
+        with ui.streaming("assistant") as out:
+            for chunk in chunks:
+                out.write(chunk)
         """
         return Streaming(self, role=_normalize_role(role), markdown=markdown)
 
@@ -187,21 +207,27 @@ class UI:
         return self._engine.spinner(label)
 
     # ----------------------------------------------------- approvals + modals
-    async def approve(self, *, title: str, body: str = "", reason: str = "") -> Decision:
+    async def approve(
+        self, *, title: str, body: str = "", reason: str = ""
+    ) -> Decision:
         """Inline approval prompt. Blocks until y / a / n / esc."""
         return await self._engine.approve(title=title, body=body, reason=reason)
 
     async def confirm(self, question: str, *, title: str = "Confirm") -> bool:
         return await self._engine.confirm(question)
 
-    async def input(self, question: str, *, title: str = "Input", default: str = "") -> str | None:
+    async def input(
+        self, question: str, *, title: str = "Input", default: str = ""
+    ) -> str | None:
         prompt = question if not default else f"{question} [{default}]"
         text = await self._engine.capture_line(f"{prompt}  (enter)")
         if text is None:
             return None
         return text or default
 
-    async def pick(self, title: str, items: Sequence[str | tuple[str, str]]) -> str | None:
+    async def pick(
+        self, title: str, items: Sequence[str | tuple[str, str]]
+    ) -> str | None:
         """Arrow-selectable picker (↑/↓ · 1-9 · enter · esc). Returns the chosen key
         (or the item itself for plain strings), or None if cancelled."""
         options = [it if isinstance(it, tuple) else (it, it) for it in items]
@@ -228,7 +254,9 @@ class UI:
     # ----------------------------------------------------- generic dispatch
     def dispatch(self, event: Any) -> None:
         """Route an event to a registered ``@ui.renderer``; falls back to printing repr."""
-        kind = event["type"] if isinstance(event, dict) else getattr(event, "type", None)
+        kind = (
+            event["type"] if isinstance(event, dict) else getattr(event, "type", None)
+        )
         fn = self._renderers.get(kind) if kind else None
         if fn is None:
             self.print(Text(repr(event)))
@@ -283,17 +311,30 @@ class UI:
         async def cmd_clear(ui: UI, args: str) -> None:
             ui.clear_transcript()
 
-        self._slash.register(SlashCommand("help", description="show commands", handler=cmd_help, aliases=("?",)))
-        self._slash.register(SlashCommand("quit", description="exit", handler=cmd_quit, aliases=("q", "exit")))
-        self._slash.register(SlashCommand("clear", description="clear the transcript", handler=cmd_clear))
+        self._slash.register(
+            SlashCommand(
+                "help", description="show commands", handler=cmd_help, aliases=("?",)
+            )
+        )
+        self._slash.register(
+            SlashCommand(
+                "quit", description="exit", handler=cmd_quit, aliases=("q", "exit")
+            )
+        )
+        self._slash.register(
+            SlashCommand("clear", description="clear the transcript", handler=cmd_clear)
+        )
 
     def _print_help(self) -> None:
         lines = ["commands"]
         for cmd in self._slash.all():
-            alias = f"  ({', '.join('/' + a for a in cmd.aliases)})" if cmd.aliases else ""
+            alias = (
+                f"  ({', '.join('/' + a for a in cmd.aliases)})" if cmd.aliases else ""
+            )
             lines.append(f"  /{cmd.name:<14} {cmd.description}{alias}")
         lines += [
-            "", "keys",
+            "",
+            "keys",
             "  enter — send  ·  alt+enter / ctrl+j — newline",
             "  esc — interrupt the current turn  ·  ctrl+d — quit",
             "  y / a / n — accept / always / deny when an approval is active",

@@ -23,7 +23,7 @@ from typing import Any
 
 @dataclass(frozen=True)
 class Step:
-    kind: str                     # "pick" | "confirm" | "text"
+    kind: str  # "pick" | "confirm" | "text"
     prompt: str
     key: str
     options: list = field(default_factory=list)
@@ -33,7 +33,9 @@ class Step:
 class _StepFactory:
     """The ``ui.step`` namespace for building wizard steps."""
 
-    def pick(self, prompt: str, options: Sequence[Any], *, key: str | None = None) -> Step:
+    def pick(
+        self, prompt: str, options: Sequence[Any], *, key: str | None = None
+    ) -> Step:
         return Step("pick", prompt, key or prompt, options=list(options))
 
     def confirm(self, prompt: str, *, key: str | None = None) -> Step:

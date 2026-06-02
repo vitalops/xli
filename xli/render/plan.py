@@ -54,7 +54,11 @@ def _iter_steps(steps: Iterable[Any]) -> Iterable[tuple[str, str, str | None]]:
     """Accept any of: dicts, dataclasses, (title, status[, notes]) tuples, bare strings."""
     for s in steps:
         if isinstance(s, dict):
-            yield (str(s.get("title", "")), str(s.get("status", "pending")), s.get("notes"))
+            yield (
+                str(s.get("title", "")),
+                str(s.get("status", "pending")),
+                s.get("notes"),
+            )
         elif isinstance(s, str):
             yield (s, "pending", None)
         elif isinstance(s, tuple):

@@ -3,13 +3,13 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "xli"
+name = "python-xli"
 version = "0.2.0"
 description = "Build polished, transcript-style terminal interfaces for chat / agent / REPL-ish apps in 20 lines of Python."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
-authors = [{ name = "xli contributors" }]
+authors = [{ name = "Fariz Rahman", email = "farizrahman4u@gmail.com" }]
 keywords = ["terminal", "tui", "cli", "chat", "agent", "transcript", "rich", "prompt-toolkit"]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -38,11 +38,22 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/fariz/xli"
-Issues = "https://github.com/fariz/xli/issues"
+Homepage = "https://github.com/vitalops/xli"
+Issues = "https://github.com/vitalops/xli/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["xli"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "xli",
+    "tests",
+    "examples",
+    "docs",
+    "README.md",
+    "LICENSE",
+    "pyproject.toml",
+]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
