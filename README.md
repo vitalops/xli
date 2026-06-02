@@ -12,7 +12,7 @@
 </div>
 
 <div align="center">
-<video src="docs/videos/demo.mp4" autoplay loop muted playsinline width="100%"></video>
+<video src="https://github.com/user-attachments/assets/2f22c6f7-cc80-4091-82b0-d4a85320d8dc" autoplay loop muted playsinline width="100%"></video>
 </div>
 
 ```python
