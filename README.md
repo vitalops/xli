@@ -272,6 +272,14 @@ decision = await ui.approve(
 
 `↑/↓` move the highlight, `1`-`9` quick-select, `Enter` confirms, `Esc` cancels.
 
+<br>
+
+<div align="center">
+<img src="https://github.com/user-attachments/assets/6d8e2da9-6f45-412f-b5ce-d4f7a9477bb5" alt="picker" width="100%"/>
+</div>
+
+<br>
+
 ## ⏸️ Interrupts
 
 The composer stays live while your handler runs — users can **type ahead** (queued prompts show as
