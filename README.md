@@ -17,7 +17,6 @@
 
 </div>
 
-## 🚀 Getting Started
 
 ```python
 import xli
