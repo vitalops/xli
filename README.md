@@ -223,6 +223,10 @@ animated cards *and* native, selectable scrollback — the thing full-screen TUI
 
 ## 🃏 Mutable cards
 
+<div align="center">
+<img src="https://github.com/user-attachments/assets/c12def96-c4e9-4d2d-8d98-e61f9928d48c" alt="mutable card" width="100%"/>
+</div>
+
 The transcript methods return a handle. Hold it, mutate it from anywhere (including across `await`s
 and from other tasks) — it re-renders in place while live, then commits to scrollback once it's
 finalized:
