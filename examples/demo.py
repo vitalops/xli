@@ -161,7 +161,7 @@ async def cmd_wizard(ui: xli.UI, args: str) -> None:
 
 @ui.command("link", description="a clickable hyperlink (OSC 8)")
 async def cmd_link(ui: xli.UI, args: str) -> None:
-    ui.link("xli on GitHub →", "https://github.com/fariz/xli")
+    ui.link("xli on GitHub →", "https://github.com/farizrahman4u/xli")
 
 
 @ui.command("notify", description="fire a desktop notification (OSC 9)")

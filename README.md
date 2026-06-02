@@ -332,7 +332,7 @@ ctrl+c               interrupt          ctrl+d  quit
 Contributions, bug reports, and ideas are very welcome! 🙌
 
 ```sh
-git clone https://github.com/fariz/xli
+git clone https://github.com/farizrahman4u/xli
 cd xli
 pip install -e ".[dev,markdown,images]"
 pytest            # run the tests
@@ -341,7 +341,7 @@ mypy xli          # type-check
 ```
 
 Found a rough edge or have a use case xli doesn't cover cleanly? Open an
-[issue](https://github.com/fariz/xli/issues) — the API is small on purpose, so design
+[issue](https://github.com/farizrahman4u/xli/issues) — the API is small on purpose, so design
 conversations matter.
 
 ## 📍 Status
