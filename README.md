@@ -4,8 +4,8 @@
 
 **Build polished, transcript-style terminal UIs for chat, agent, and REPL apps — in ~20 lines of Python.** ✨
 
-[![PyPI](https://img.shields.io/pypi/v/xli.svg)](https://pypi.org/project/xli/)
-[![Python](https://img.shields.io/pypi/pyversions/xli.svg)](https://pypi.org/project/xli/)
+[![PyPI](https://img.shields.io/pypi/v/python-xli.svg)](https://pypi.org/project/python-xli/)
+[![Python](https://img.shields.io/pypi/pyversions/python-xli.svg)](https://pypi.org/project/python-xli/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Built on rich + prompt_toolkit](https://img.shields.io/badge/built%20on-rich%20%2B%20prompt__toolkit-8a2be2.svg)](#-credits)
 
