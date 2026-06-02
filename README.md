@@ -38,44 +38,12 @@ the screen.
 
 <table>
 <tr>
-<td align="center" width="33%">
-
-![initial](screesnhots/initial.png)
-
-**Streaming transcript**<br>Markdown renders token-by-token with a reasoning rail and themed status bar.
-</td>
-<td align="center" width="33%">
-
-![options](screesnhots/options.png)
-
-**Slash commands**<br>Typing `/` opens an inline command list with descriptions — no modal needed.
-</td>
-<td align="center" width="33%">
-
-![filepicker](screesnhots/filepicker.png)
-
-**`@` file picker**<br>Typing `@` surfaces files from the working directory for inline reference.
-</td>
-</tr>
-<tr>
-<td align="center" width="33%">
-
-![approval](screesnhots/approval.png)
-
-**Inline approval**<br>Agent asks permission right in the transcript — arrow-select Yes / No, no screen takeover.
-</td>
-<td align="center" width="33%">
-
-![wizard](screesnhots/wizard.png)
-
-**`ui.pick()`**<br>Arrow-navigable picker (or press 1–9) rendered inline while the agent waits.
-</td>
-<td align="center" width="33%">
-
-![runningtests](screesnhots/runningtests.png)
-
-**Live tool card**<br>A shell command running in place with an animated spinner and elapsed timer.
-</td>
+<td align="center"><img src="screesnhots/initial.png" width="480"/><br/><br/><b>Streaming transcript</b><br/>Markdown renders token-by-token, settles into selectable scrollback.</td>
+<td align="center"><img src="screesnhots/options.png" width="480"/><br/><br/><b>Slash commands</b><br/>Typing <code>/</code> opens an inline list — Tab to fill, Enter to run.</td>
+<td align="center"><img src="screesnhots/filepicker.png" width="480"/><br/><br/><b><code>@</code> file picker</b><br/>Type <code>@</code> to surface files from the working directory.</td>
+<td align="center"><img src="screesnhots/approval.png" width="480"/><br/><br/><b>Inline approval</b><br/>Agent asks permission right in the transcript — no screen takeover.</td>
+<td align="center"><img src="screesnhots/wizard.png" width="480"/><br/><br/><b><code>ui.pick()</code></b><br/>Arrow-navigable picker rendered inline while the agent waits.</td>
+<td align="center"><img src="screesnhots/runningtests.png" width="480"/><br/><br/><b>Live tool card</b><br/>Shell command running in place with an animated spinner.</td>
 </tr>
 </table>
 
