@@ -46,42 +46,12 @@ the screen.
 
 <table>
 <tr>
-<td align="center">
-
-https://github.com/user-attachments/assets/32f7fa23-2ea2-4fac-9bda-0af404023f6f
-
-<b>Streaming transcript</b>
-</td>
-<td align="center">
-
-https://github.com/user-attachments/assets/9c48cec0-cf75-41e6-91af-6529019f8f0a
-
-<b>Slash commands</b>
-</td>
-<td align="center">
-
-https://github.com/user-attachments/assets/17f99fa2-2739-4da2-865d-230de25ff4e3
-
-<b><code>@</code> file picker</b>
-</td>
-<td align="center">
-
-https://github.com/user-attachments/assets/1bd447e2-b3d2-43cf-8fa5-dbd3c066a380
-
-<b>Inline approval</b>
-</td>
-<td align="center">
-
-https://github.com/user-attachments/assets/37acc10e-7e40-4671-9517-2405f0bb3c27
-
-<b><code>ui.pick()</code></b>
-</td>
-<td align="center">
-
-https://github.com/user-attachments/assets/7a5038ec-9b1d-44fa-ad82-425eb3f82f76
-
-<b>Live tool card</b>
-</td>
+<td align="center"><img src="https://github.com/user-attachments/assets/32f7fa23-2ea2-4fac-9bda-0af404023f6f" width="700"/><br/><br/><b>Streaming transcript</b></td>
+<td align="center"><img src="https://github.com/user-attachments/assets/9c48cec0-cf75-41e6-91af-6529019f8f0a" width="700"/><br/><br/><b>Slash commands</b></td>
+<td align="center"><img src="https://github.com/user-attachments/assets/17f99fa2-2739-4da2-865d-230de25ff4e3" width="700"/><br/><br/><b><code>@</code> file picker</b></td>
+<td align="center"><img src="https://github.com/user-attachments/assets/1bd447e2-b3d2-43cf-8fa5-dbd3c066a380" width="700"/><br/><br/><b>Inline approval</b></td>
+<td align="center"><img src="https://github.com/user-attachments/assets/37acc10e-7e40-4671-9517-2405f0bb3c27" width="700"/><br/><br/><b><code>ui.pick()</code></b></td>
+<td align="center"><img src="https://github.com/user-attachments/assets/7a5038ec-9b1d-44fa-ad82-425eb3f82f76" width="700"/><br/><br/><b>Live tool card</b></td>
 </tr>
 </table>
 
