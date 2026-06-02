@@ -13,7 +13,7 @@
 
 <div align="center">
 
-![demo](https://github.com/user-attachments/assets/fdd60b58-0b37-4a9d-879d-6aa62b860e0b)
+<video src="https://github.com/user-attachments/assets/fdd60b58-0b37-4a9d-879d-6aa62b860e0b" autoplay loop muted playsinline width="100%"></video>
 
 </div>
 
