@@ -11,6 +11,14 @@
 
 </div>
 
+<div align="center">
+
+<img src="https://github.com/user-attachments/assets/fefe0758-2d18-4fb2-82b8-8a7d8cc83e17" alt="demo" width="100%"/>
+
+</div>
+
+_____
+
 ```python
 import xli
 
@@ -214,6 +222,10 @@ result = await run_shell(...)
 card.update(status="done", output=result)        # ✓ shell … and the output, committed
 ```
 
+<div align="center">
+<img src="https://github.com/user-attachments/assets/c12def96-c4e9-4d2d-8d98-e61f9928d48c" alt="mutable card" width="100%"/>
+</div>
+
 A `ui.tool(...)` **without** a `status` is a one-shot card (committed immediately). With
 `status="running"` it stays live and mutable until you update it to `done` / `error` / `cancelled`.
 
@@ -232,9 +244,13 @@ async def cmd_quit(ui, args):
 ```
 
 Typing `/` opens a command list **below** the composer (arrow to navigate, Tab to fill, Enter to
-run). `/help`, `/quit`, and `/clear` are built in (override freely). Typing `@` opens a **file
-picker** from the working directory; Tab/Enter inserts the path — handy for letting users reference
-files for your agent.
+run). `/help`, `/quit`, and `/clear` are built in (override freely).
+
+<div align="center">
+<img src="https://github.com/user-attachments/assets/02a717ee-953c-4bc6-b6cf-c27899d6190e" alt="file picker" width="100%"/>
+</div>
+
+Typing `@` opens a **file picker** from the working directory; Tab/Enter inserts the path — handy for letting users reference files for your agent.
 
 ## ✅ Approvals, pickers, wizards
 
@@ -250,6 +266,10 @@ decision = await ui.approve(
 )   # -> "approved" | "approved_for_session" | "denied" | "aborted"
 ```
 
+<div align="center">
+<img src="https://github.com/user-attachments/assets/6d8e2da9-6f45-412f-b5ce-d4f7a9477bb5" alt="picker" width="100%"/>
+</div>
+
 `↑/↓` move the highlight, `1`-`9` quick-select, `Enter` confirms, `Esc` cancels.
 
 ## ⏸️ Interrupts
@@ -263,6 +283,10 @@ cancellation; register cleanup with `@ui.on_interrupt`:
 async def cleanup():
     await release_resources()       # don't write to the transcript here
 ```
+
+<div align="center">
+<img src="https://github.com/user-attachments/assets/4d0b8e07-69a0-4144-845e-34f1989f2d85" alt="interrupt" width="100%"/>
+</div>
 
 A running tool card left behind by an interrupted turn is automatically marked `cancelled`.
 
