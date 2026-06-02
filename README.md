@@ -11,6 +11,10 @@
 
 </div>
 
+<div align="center">
+<video src="docs/videos/demo.mp4" autoplay loop muted playsinline width="100%"></video>
+</div>
+
 ```python
 import xli
 
@@ -38,12 +42,16 @@ the screen.
 
 <table>
 <tr>
-<td align="center"><img src="screesnhots/initial.png" width="480"/><br/><br/><b>Streaming transcript</b><br/>Markdown renders token-by-token, settles into selectable scrollback.</td>
-<td align="center"><img src="screesnhots/options.png" width="480"/><br/><br/><b>Slash commands</b><br/>Typing <code>/</code> opens an inline list — Tab to fill, Enter to run.</td>
-<td align="center"><img src="screesnhots/filepicker.png" width="480"/><br/><br/><b><code>@</code> file picker</b><br/>Type <code>@</code> to surface files from the working directory.</td>
-<td align="center"><img src="screesnhots/approval.png" width="480"/><br/><br/><b>Inline approval</b><br/>Agent asks permission right in the transcript — no screen takeover.</td>
-<td align="center"><img src="screesnhots/wizard.png" width="480"/><br/><br/><b><code>ui.pick()</code></b><br/>Arrow-navigable picker rendered inline while the agent waits.</td>
-<td align="center"><img src="screesnhots/runningtests.png" width="480"/><br/><br/><b>Live tool card</b><br/>Shell command running in place with an animated spinner.</td>
+<td align="center" width="50%"><img src="docs/screesnhots/initial.png" width="100%"/><br/><br/><b>Streaming transcript</b><br/>Markdown renders token-by-token and settles into selectable scrollback.</td>
+<td align="center" width="50%"><img src="docs/screesnhots/slash.png" width="100%"/><br/><br/><b>Slash commands</b><br/>Typing <code>/</code> opens an inline list with descriptions — Tab to fill, Enter to run.</td>
+</tr>
+<tr>
+<td align="center" width="50%"><img src="docs/screesnhots/file%20picker.png" width="100%"/><br/><br/><b><code>@</code> file picker</b><br/>Type <code>@</code> to surface files from the working directory and insert a path.</td>
+<td align="center" width="50%"><img src="docs/screesnhots/approve.png" width="100%"/><br/><br/><b>Inline approval</b><br/>Agent asks permission right in the transcript — arrow-select, no screen takeover.</td>
+</tr>
+<tr>
+<td align="center" width="50%"><img src="docs/screesnhots/wizard.png" width="100%"/><br/><br/><b><code>ui.pick()</code></b><br/>Arrow-navigable picker (or press 1–9) rendered inline while the agent waits.</td>
+<td align="center" width="50%"><img src="docs/screesnhots/tools.png" width="100%"/><br/><br/><b>Live tool card</b><br/>Shell command running in place with an animated spinner and elapsed timer.</td>
 </tr>
 </table>
 
