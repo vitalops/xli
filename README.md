@@ -12,8 +12,12 @@
 </div>
 
 <div align="center">
-<video src="https://github.com/user-attachments/assets/2f22c6f7-cc80-4091-82b0-d4a85320d8dc" autoplay loop muted playsinline width="100%"></video>
+
+![demo](https://github.com/user-attachments/assets/2f22c6f7-cc80-4091-82b0-d4a85320d8dc)
+
 </div>
+
+## 🚀 Getting Started
 
 ```python
 import xli
@@ -42,16 +46,16 @@ the screen.
 
 <table>
 <tr>
-<td align="center" width="50%"><img src="docs/screesnhots/initial.png" width="100%"/><br/><br/><b>Streaming transcript</b><br/>Markdown renders token-by-token and settles into selectable scrollback.</td>
-<td align="center" width="50%"><img src="docs/screesnhots/slash.png" width="100%"/><br/><br/><b>Slash commands</b><br/>Typing <code>/</code> opens an inline list with descriptions — Tab to fill, Enter to run.</td>
+<td align="center" width="50%"><img src="docs/screesnhots/initial.png" width="100%"/><br/><br/><b>Streaming transcript</b></td>
+<td align="center" width="50%"><img src="docs/screesnhots/slash.png" width="100%"/><br/><br/><b>Slash commands</b></td>
 </tr>
 <tr>
-<td align="center" width="50%"><img src="docs/screesnhots/file%20picker.png" width="100%"/><br/><br/><b><code>@</code> file picker</b><br/>Type <code>@</code> to surface files from the working directory and insert a path.</td>
-<td align="center" width="50%"><img src="docs/screesnhots/approve.png" width="100%"/><br/><br/><b>Inline approval</b><br/>Agent asks permission right in the transcript — arrow-select, no screen takeover.</td>
+<td align="center" width="50%"><img src="docs/screesnhots/file%20picker.png" width="100%"/><br/><br/><b><code>@</code> file picker</b></td>
+<td align="center" width="50%"><img src="docs/screesnhots/approve.png" width="100%"/><br/><br/><b>Inline approval</b></td>
 </tr>
 <tr>
-<td align="center" width="50%"><img src="docs/screesnhots/wizard.png" width="100%"/><br/><br/><b><code>ui.pick()</code></b><br/>Arrow-navigable picker (or press 1–9) rendered inline while the agent waits.</td>
-<td align="center" width="50%"><img src="docs/screesnhots/tools.png" width="100%"/><br/><br/><b>Live tool card</b><br/>Shell command running in place with an animated spinner and elapsed timer.</td>
+<td align="center" width="50%"><img src="docs/screesnhots/wizard.png" width="100%"/><br/><br/><b><code>ui.pick()</code></b></td>
+<td align="center" width="50%"><img src="docs/screesnhots/tools.png" width="100%"/><br/><br/><b>Live tool card</b></td>
 </tr>
 </table>
 
