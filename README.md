@@ -294,6 +294,14 @@ async def cleanup():
 
 A running tool card left behind by an interrupted turn is automatically marked `cancelled`.
 
+<br>
+
+<div align="center">
+<img src="https://github.com/user-attachments/assets/4d0b8e07-69a0-4144-845e-34f1989f2d85" alt="interrupt" width="100%"/>
+</div>
+
+<br>
+
 ## 🎨 Themes
 
 ```python
