@@ -36,6 +36,29 @@ the screen.
 
 ---
 
+## 📸 Screenshots
+
+**Streaming transcript** — markdown renders token-by-token with a reasoning rail and themed status bar.
+![initial](screesnhots/initial.png)
+
+**Slash commands** — typing `/` opens an inline command list with descriptions; no modal needed.
+![options](screesnhots/options.png)
+
+**`@` file picker** — typing `@` surfaces files from the working directory so the user can reference them inline.
+![filepicker](screesnhots/filepicker.png)
+
+**Inline approval** — agent asks permission right in the transcript; arrow-select Yes / No, no screen takeover.
+![approval](screesnhots/approval.png)
+
+**`ui.pick()`** — arrow-navigable picker (or press 1–9) rendered inline while the agent waits.
+![wizard](screesnhots/wizard.png)
+
+**Live tool card** — a shell command running in place with an animated spinner and elapsed timer.
+![runningtests](screesnhots/runningtests.png)
+
+
+---
+
 ## ✨ Highlights
 
 - 📜 **Real scrollback, not a screen takeover.** Finalized output is printed into your terminal's
