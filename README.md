@@ -13,7 +13,7 @@
 
 <div align="center">
 
-<video src="https://github.com/user-attachments/assets/fdd60b58-0b37-4a9d-879d-6aa62b860e0b" autoplay loop muted playsinline width="100%"></video>
+<img src="https://github.com/user-attachments/assets/ce0b64f8-83a2-441f-a6f1-35ab10d3eaa6" alt="demo" width="100%"/>
 
 </div>
 
@@ -46,20 +46,44 @@ the screen.
 
 <table>
 <tr>
-<td align="center" width="50%"><img src="docs/screesnhots/initial.png" width="100%"/><br/><br/><b>Streaming transcript</b></td>
-<td align="center" width="50%"><img src="docs/screesnhots/slash.png" width="100%"/><br/><br/><b>Slash commands</b></td>
-</tr>
-<tr>
-<td align="center" width="50%"><img src="docs/screesnhots/file%20picker.png" width="100%"/><br/><br/><b><code>@</code> file picker</b></td>
-<td align="center" width="50%"><img src="docs/screesnhots/approve.png" width="100%"/><br/><br/><b>Inline approval</b></td>
-</tr>
-<tr>
-<td align="center" width="50%"><img src="docs/screesnhots/wizard.png" width="100%"/><br/><br/><b><code>ui.pick()</code></b></td>
-<td align="center" width="50%"><img src="docs/screesnhots/tools.png" width="100%"/><br/><br/><b>Live tool card</b></td>
+<td align="center">
+
+https://github.com/user-attachments/assets/32f7fa23-2ea2-4fac-9bda-0af404023f6f
+
+<b>Streaming transcript</b>
+</td>
+<td align="center">
+
+https://github.com/user-attachments/assets/9c48cec0-cf75-41e6-91af-6529019f8f0a
+
+<b>Slash commands</b>
+</td>
+<td align="center">
+
+https://github.com/user-attachments/assets/17f99fa2-2739-4da2-865d-230de25ff4e3
+
+<b><code>@</code> file picker</b>
+</td>
+<td align="center">
+
+https://github.com/user-attachments/assets/1bd447e2-b3d2-43cf-8fa5-dbd3c066a380
+
+<b>Inline approval</b>
+</td>
+<td align="center">
+
+https://github.com/user-attachments/assets/37acc10e-7e40-4671-9517-2405f0bb3c27
+
+<b><code>ui.pick()</code></b>
+</td>
+<td align="center">
+
+https://github.com/user-attachments/assets/7a5038ec-9b1d-44fa-ad82-425eb3f82f76
+
+<b>Live tool card</b>
+</td>
 </tr>
 </table>
-
----
 
 ## ✨ Highlights
 
