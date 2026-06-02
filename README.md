@@ -13,7 +13,7 @@
 
 <div align="center">
 
-![demo](https://github.com/user-attachments/assets/2f22c6f7-cc80-4091-82b0-d4a85320d8dc)
+![demo](https://github.com/user-attachments/assets/fdd60b58-0b37-4a9d-879d-6aa62b860e0b)
 
 </div>
 
