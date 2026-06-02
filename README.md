@@ -36,26 +36,48 @@ the screen.
 
 ---
 
-## 📸 Screenshots
+<table>
+<tr>
+<td align="center" width="33%">
 
-**Streaming transcript** — markdown renders token-by-token with a reasoning rail and themed status bar.
 ![initial](screesnhots/initial.png)
 
-**Slash commands** — typing `/` opens an inline command list with descriptions; no modal needed.
+**Streaming transcript**<br>Markdown renders token-by-token with a reasoning rail and themed status bar.
+</td>
+<td align="center" width="33%">
+
 ![options](screesnhots/options.png)
 
-**`@` file picker** — typing `@` surfaces files from the working directory so the user can reference them inline.
+**Slash commands**<br>Typing `/` opens an inline command list with descriptions — no modal needed.
+</td>
+<td align="center" width="33%">
+
 ![filepicker](screesnhots/filepicker.png)
 
-**Inline approval** — agent asks permission right in the transcript; arrow-select Yes / No, no screen takeover.
+**`@` file picker**<br>Typing `@` surfaces files from the working directory for inline reference.
+</td>
+</tr>
+<tr>
+<td align="center" width="33%">
+
 ![approval](screesnhots/approval.png)
 
-**`ui.pick()`** — arrow-navigable picker (or press 1–9) rendered inline while the agent waits.
+**Inline approval**<br>Agent asks permission right in the transcript — arrow-select Yes / No, no screen takeover.
+</td>
+<td align="center" width="33%">
+
 ![wizard](screesnhots/wizard.png)
 
-**Live tool card** — a shell command running in place with an animated spinner and elapsed timer.
+**`ui.pick()`**<br>Arrow-navigable picker (or press 1–9) rendered inline while the agent waits.
+</td>
+<td align="center" width="33%">
+
 ![runningtests](screesnhots/runningtests.png)
 
+**Live tool card**<br>A shell command running in place with an animated spinner and elapsed timer.
+</td>
+</tr>
+</table>
 
 ---
 
