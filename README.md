@@ -44,17 +44,6 @@ the screen.
 
 ---
 
-<table>
-<tr>
-<td align="center"><img src="https://github.com/user-attachments/assets/32f7fa23-2ea2-4fac-9bda-0af404023f6f" width="700"/><br/><br/><b>Streaming transcript</b></td>
-<td align="center"><img src="https://github.com/user-attachments/assets/9c48cec0-cf75-41e6-91af-6529019f8f0a" width="700"/><br/><br/><b>Slash commands</b></td>
-<td align="center"><img src="https://github.com/user-attachments/assets/17f99fa2-2739-4da2-865d-230de25ff4e3" width="700"/><br/><br/><b><code>@</code> file picker</b></td>
-<td align="center"><img src="https://github.com/user-attachments/assets/1bd447e2-b3d2-43cf-8fa5-dbd3c066a380" width="700"/><br/><br/><b>Inline approval</b></td>
-<td align="center"><img src="https://github.com/user-attachments/assets/37acc10e-7e40-4671-9517-2405f0bb3c27" width="700"/><br/><br/><b><code>ui.pick()</code></b></td>
-<td align="center"><img src="https://github.com/user-attachments/assets/7a5038ec-9b1d-44fa-ad82-425eb3f82f76" width="700"/><br/><br/><b>Live tool card</b></td>
-</tr>
-</table>
-
 ## ✨ Highlights
 
 - 📜 **Real scrollback, not a screen takeover.** Finalized output is printed into your terminal's
@@ -258,6 +247,14 @@ Typing `/` opens a command list **below** the composer (arrow to navigate, Tab t
 run). `/help`, `/quit`, and `/clear` are built in (override freely). Typing `@` opens a **file
 picker** from the working directory; Tab/Enter inserts the path — handy for letting users reference
 files for your agent.
+
+<br>
+
+<div align="center">
+<img src="https://github.com/user-attachments/assets/02a717ee-953c-4bc6-b6cf-c27899d6190e" alt="file picker" width="100%"/>
+</div>
+
+<br>
 
 ## ✅ Approvals, pickers, wizards
 
